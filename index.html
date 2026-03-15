@@ -92,9 +92,10 @@
   /* ── HERO ── */
   #hero {
     position: relative;
-    height: 100vh; min-height: 700px;
-    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh;
+    display: flex; align-items: stretch; justify-content: center;
     overflow: hidden;
+    flex-direction: column;
   }
   .hero-bg {
     position: absolute; inset: 0;
@@ -125,6 +126,9 @@
     text-align: center;
     padding: 0 24px;
     animation: heroIn 1.2s ease forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   @keyframes heroIn {
     from { opacity: 0; transform: translateY(40px); }
@@ -204,10 +208,15 @@
   }
 
   .hero-stats {
-    position: absolute; bottom: 60px; left: 0; right: 0;
-    display: flex; justify-content: center; gap: 80px;
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
     z-index: 2;
     animation: heroIn 1.4s ease forwards;
+    margin-top: 48px;
+    padding: 24px 20px;
+    background: rgba(10,15,30,0.4);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(42,95,168,0.2);
+    width: 100%;
   }
   .stat-item { text-align: center; }
   .stat-num {
@@ -562,22 +571,188 @@
   .wa-float:hover { transform: scale(1.1); background: #1db954; }
   .wa-float svg { width: 28px; fill: #fff; }
 
+  /* ── HAMBURGER MENU ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 1001;
+    flex-shrink: 0;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--white);
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    nav { padding: 0 24px; }
-    .nav-links { display: none; }
-    section { padding: 80px 24px; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-years { right: 0; }
-    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-    .gallery-placeholder-grid { grid-template-columns: 1fr 1fr; }
-    .gallery-item.featured { grid-column: span 1; }
-    .hero-stats { gap: 36px; }
-    #cta { padding: 80px 24px; }
+    /* NAV */
+    nav { padding: 0 20px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(10,15,30,0.98);
+      backdrop-filter: blur(16px);
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 16px 0 24px;
+      border-bottom: 1px solid rgba(42,95,168,0.3);
+      z-index: 1000;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; text-align: center; }
+    .nav-links a {
+      display: block;
+      padding: 14px 24px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(42,95,168,0.1);
+    }
+    .nav-cta { margin: 12px 24px 0; display: block; text-align: center; border-radius: 2px; }
+
+    /* HERO - full column, stats below buttons */
+    #hero { min-height: 100svh; flex-direction: column; }
+    .hero-content { padding: 100px 20px 0; justify-content: center; }
+    .hero-badge { font-size: 9px; letter-spacing: 2px; padding: 5px 14px; }
+    .hero-tagline { font-size: 14px; margin-bottom: 28px; }
+    .hero-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .btn-primary, .btn-secondary {
+      width: 100%;
+      justify-content: center;
+      padding: 15px 24px;
+      font-size: 14px;
+    }
+    .hero-stats {
+      margin-top: 32px;
+      gap: 16px 32px;
+      padding: 20px 16px;
+      justify-content: center;
+    }
+    .stat-num { font-size: 28px; }
+    .stat-label { font-size: 9px; }
+    .hero-scroll { display: none; }
+
+    /* SECTIONS */
+    section { padding: 64px 20px; }
+    .section-title { font-size: clamp(32px, 7vw, 56px); }
+
+    /* ABOUT */
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .about-image-wrap::before { display: none; }
+    .about-years { right: 0; bottom: -16px; padding: 14px 20px; }
+    .about-years-num { font-size: 38px; }
+
+    /* SERVICES */
+    .services-grid { grid-template-columns: 1fr; gap: 2px; }
+
+    /* PRICING */
+    .pricing-table { display: block; }
+    .pricing-table thead { display: none; }
+    .pricing-table tbody { display: block; }
+    .pricing-table tr {
+      display: block;
+      margin-bottom: 12px;
+      background: var(--navy-light);
+      border: 1px solid rgba(42,95,168,0.2);
+      padding: 16px;
+      border-radius: 2px;
+    }
+    .pricing-table td {
+      display: block;
+      padding: 4px 0;
+      font-size: 14px;
+      border: none;
+    }
+    .pricing-table td:first-child {
+      font-size: 16px;
+      color: var(--white);
+      margin-bottom: 6px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(42,95,168,0.2);
+    }
+    .pricing-table td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--blue-electric);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    /* WHY */
+    .why-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .why-card { padding: 24px 16px; }
+    .why-card .icon { font-size: 32px; }
+    .why-card h3 { font-size: 16px; }
+    .why-card p { font-size: 13px; }
+
+    /* GALLERY */
+    .gallery-real-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+    .gallery-real-grid .gallery-real-item.wide { grid-column: span 1; }
+
+    /* CTA */
+    #cta { padding: 64px 20px; }
+    #cta h2 { font-size: 36px; letter-spacing: 2px; }
+    #cta p { font-size: 15px; }
+    .whatsapp-btn {
+      padding: 16px 28px; font-size: 17px; letter-spacing: 2px;
+      width: 100%; max-width: 340px; justify-content: center;
+    }
+
+    /* FOOTER */
+    .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+    footer { padding: 48px 20px 28px; }
+    .footer-brand p { max-width: 100%; }
+
+    /* WHATSAPP FLOAT — siempre visible */
+    .wa-float {
+      bottom: 20px !important;
+      right: 16px !important;
+      width: 52px !important;
+      height: 52px !important;
+      z-index: 9999 !important;
+      position: fixed !important;
+    }
+
+    /* LIGHTBOX */
+    #lb-prev { left: 4px; font-size: 32px; padding: 8px 10px; }
+    #lb-next { right: 4px; font-size: 32px; padding: 8px 10px; }
+    #lightbox img { max-width: 96vw; max-height: 80vh; }
   }
-  @media (max-width: 600px) {
-    .hero-stats { flex-wrap: wrap; gap: 24px; }
-    footer { padding: 40px 24px 24px; }
+
+  @media (max-width: 480px) {
+    .nav-logo { font-size: 20px; }
+    .hero-badge { display: none; }
+    .hero-stats { gap: 12px 20px; }
+    .stat-num { font-size: 24px; }
+    .stat-item { min-width: 80px; }
+    section { padding: 56px 16px; }
+    .section-title { font-size: 32px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .gallery-real-grid { grid-template-columns: 1fr; }
+    .gallery-real-grid .gallery-real-item { aspect-ratio: 16/9; }
+    .highlight-item { padding: 12px 14px; }
+    .highlight-icon { font-size: 18px; }
+    .highlight-item p { font-size: 13px; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+    .social-links { justify-content: flex-start; }
   }
 
   /* ── FADE IN ON SCROLL ── */
@@ -654,7 +829,10 @@
 <!-- NAVBAR -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">GR <span>MECÁNICA</span></a>
-  <ul class="nav-links">
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">Nosotros</a></li>
     <li><a href="#services">Servicios</a></li>
     <li><a href="#pricing">Tarifas</a></li>
@@ -674,29 +852,29 @@
     <p class="hero-subtitle">Automotriz</p>
     <p class="hero-tagline">Especialistas en diagnóstico avanzado, mecánica de alta complejidad y mantenimiento preventivo. Tu vehículo en las mejores manos.</p>
     <div class="hero-buttons">
-      <a href="https://wa.me/5491127041415?text=Hola,%20quiero%20agendar%20una%20cita" class="btn-primary" target="_blank">
+      <a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20consultar%20sobre%20un%20servicio%20y%20agendar%20mi%20cita" class="btn-primary" target="_blank">
         <svg viewBox="0 0 24 24" style="width:18px;fill:white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.535 5.845L0 24l6.335-1.509A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.555 9.555 0 01-4.985-1.4l-.356-.214-3.762.896.938-3.667-.232-.375A9.556 9.556 0 012.4 12C2.4 6.7 6.7 2.4 12 2.4S21.6 6.7 21.6 12 17.3 21.6 12 21.6z"/></svg>
         Agendar por WhatsApp
       </a>
       <a href="#services" class="btn-secondary">Ver Servicios ↓</a>
     </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-num">15+</div>
-      <div class="stat-label">Años de Experiencia</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">100%</div>
-      <div class="stat-label">Garantía en Repuestos</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">24/7</div>
-      <div class="stat-label">Consultas por WhatsApp</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">A+</div>
-      <div class="stat-label">Servicio a Domicilio</div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Años de Experiencia</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Garantía en Repuestos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Consultas por WhatsApp</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">A+</div>
+        <div class="stat-label">Servicio a Domicilio</div>
+      </div>
     </div>
   </div>
   <div class="hero-scroll">
@@ -808,7 +986,7 @@
         <div class="service-icon">💬</div>
         <h3>¿Tenés otro problema?</h3>
         <p style="margin-bottom:20px;">Consultanos sin compromiso. Si tu vehículo necesita algo que no está en la lista, escribinos y te orientamos.</p>
-        <a href="https://wa.me/5491127041415?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20vehículo" class="btn-primary" target="_blank" style="font-size:13px;padding:12px 24px;">Consultar ahora</a>
+        <a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20consultar%20sobre%20un%20servicio%20y%20agendar%20mi%20cita" class="btn-primary" target="_blank" style="font-size:13px;padding:12px 24px;">Consultar ahora</a>
       </div>
 
     </div>
@@ -834,18 +1012,18 @@
         <tbody>
           <tr>
             <td>Visita y Diagnóstico Inicial</td>
-            <td>Revisión técnica visual y presencial del vehículo. Evaluación de síntomas y recomendaciones.</td>
-            <td><span class="price-val">$35.000</span></td>
+            <td data-label="Descripción">Revisión técnica visual y presencial del vehículo. Evaluación de síntomas y recomendaciones.</td>
+            <td data-label="Valor"><span class="price-val">$35.000</span></td>
           </tr>
           <tr>
             <td>Diagnóstico con Escáner</td>
-            <td>Uso de equipo OTOFIX profesional + reporte completo de fallas del sistema electrónico.</td>
-            <td><span class="price-val">$55.000</span></td>
+            <td data-label="Descripción">Uso de equipo OTOFIX profesional + reporte completo de fallas del sistema electrónico.</td>
+            <td data-label="Valor"><span class="price-val">$55.000</span></td>
           </tr>
           <tr>
             <td>Bonificación Especial</td>
-            <td>Si realizás el arreglo con nosotros, el costo del diagnóstico se descuenta íntegro del presupuesto final.</td>
-            <td><span class="price-bonus">100% CRÉDITO</span></td>
+            <td data-label="Descripción">Si realizás el arreglo con nosotros, el costo del diagnóstico se descuenta íntegro del presupuesto final.</td>
+            <td data-label="Valor"><span class="price-bonus">100% CRÉDITO</span></td>
           </tr>
         </tbody>
       </table>
@@ -945,7 +1123,7 @@
   <div class="container">
     <h2>AGENDÁ TU <span>CITA</span> HOY</h2>
     <p>Un mensaje es todo lo que necesitás. Te respondemos al instante y coordinamos el servicio a tu medida.</p>
-    <a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20agendar%20una%20cita%20con%20GR%20Mec%C3%A1nica%20Automotriz" class="whatsapp-btn" target="_blank">
+    <a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20consultar%20sobre%20un%20servicio%20y%20agendar%20mi%20cita" class="whatsapp-btn" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.535 5.845L0 24l6.335-1.509A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.555 9.555 0 01-4.985-1.4l-.356-.214-3.762.896.938-3.667-.232-.375A9.556 9.556 0 012.4 12C2.4 6.7 6.7 2.4 12 2.4S21.6 6.7 21.6 12 17.3 21.6 12 21.6z"/></svg>
       ESCRIBINOS POR WHATSAPP
     </a>
@@ -993,7 +1171,7 @@
 </footer>
 
 <!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20consultar%20sobre%20un%20servicio" class="wa-float" target="_blank" title="Chatear por WhatsApp">
+<a href="https://wa.me/5491127041415?text=Hola!%20Quiero%20consultar%20sobre%20un%20servicio%20y%20agendar%20mi%20cita" class="wa-float" target="_blank" title="Chatear por WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.535 5.845L0 24l6.335-1.509A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.555 9.555 0 01-4.985-1.4l-.356-.214-3.762.896.938-3.667-.232-.375A9.556 9.556 0 012.4 12C2.4 6.7 6.7 2.4 12 2.4S21.6 6.7 21.6 12 17.3 21.6 12 21.6z"/></svg>
 </a>
 
@@ -1005,7 +1183,20 @@
   <span id="lb-next" onclick="lbNav(1);event.stopPropagation()">›</span>
 </div>
 <script>
-  // Navbar scroll effect
+  // Hamburger menu
+  function toggleMenu() {
+    const ham = document.getElementById('hamburger');
+    const links = document.getElementById('nav-links');
+    ham.classList.toggle('open');
+    links.classList.toggle('open');
+  }
+  // Close menu when a link is clicked
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('nav-links').classList.remove('open');
+    });
+  });
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 50);
